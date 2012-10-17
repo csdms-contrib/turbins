@@ -1,0 +1,79 @@
+Brief guide to install and run the software TURBINS. 
+
+Developed by: 
+	Mohamad M. Nasr-Azadani
+	PhD Candidate
+	Department of Mechanical Engineering, 
+	University of California, Santa Barbara, CA, USA. 
+	Contact information: mmnasr@engr.ucsb.edu, mmnasr@gmail.com
+
+
+1- Requirements: 
+	a) PETSc 3.1 (http://www.mcs.anl.gov/petsc/)
+	b) Hypre 2.7.b (http://acts.nersc.gov/hypre/)
+	c) HDF5 (http://www.hdfgroup.org/HDF5/)
+
+2- Installation:
+
+	a) Install PETSc with hypre and hdf5. 
+	For a detailed instruction see (http://www.mcs.anl.gov/petsc/documentation/installation.html)
+	
+	The easiest way is to download the hypre.tar.gz file directly from hypre website and store the tar.gz file locally. 
+	Do not untar or install that file if you would like PETSc to do the installation. 
+	For example, to install PETSc without debugging mode (faster!) and gcc compilers, you can simply: 
+
+		./configure --with-cc=gcc --with-fc=gfortran --download-f-blas-lapack=1 --download-mpich=1 --download-hypre=[address_to_the_hypre_tar_file] --download-hdf5=1
+
+	If configuration goes fine, then you can simply install the PETSc by:
+
+		make all test
+
+	At the end, it will run some simple tests to verify the installation. 
+	If you are compiling this on a supercomputer, sometimes the tests fail, do not worry it is because of the scheduling issue. 
+	Also, for trouble with PETSc installation, PETSc email list is very active. You can ask your questions and get prompt response. 
+	[see http://www.mcs.anl.gov/petsc/miscellaneous/mailing-lists.html]
+
+	b) Updating the Makefile:
+	Once the PETSc installation is complete, using the right PETSC_ARCH and PETSC_DIR (just go to PETSC_DIR), we need to extract the libraries and include directories. 
+	In the petsc directory type to get: 
+
+		make getlinklibs
+	
+	The result should be copied as SYS_LIBS in the Makefile provided. 
+	Next,
+	
+		make getincludedirs
+
+	The result should be copied as PETSC_INCLUDE in the Makefile provided. 
+
+
+3- Compile TURBINS
+	
+	Once the Makefile is updated, simply type 
+
+		make
+
+	If there are no errors, an executable file named "gvg" is generated. 
+	Copy this file along with the "input.inp" file and you can run the code (or submit it to a scheduler on supercomputers)
+
+
+4- Extra necessary files
+
+	If you are resuming the code, make sure the Resume flag in the input.inp file is set to YES. 
+	Also, you need to run "gvg" in the folder with all the files starting with Resume_*.bin
+	
+	If you are running the code with nonuniform grid, you need to provide three grid files. They have to be in the same folder as "gvg" file. 
+	Grid_x.inp
+	Grid_y.inp
+	Grid_z.inp
+
+
+	To generate these files, just simply comple GridGenerator.c file in the Others folder. 
+	Run the executable and mv the "grid.dat" file to the folder with gvg file. 
+	Remember that you need to compile and run this code three times for each direction to generate Grid_x.inp, Grid_y.inp and Grid_z.inp files. 
+	(see instructions on how to generate non-uniform grid using GridGenerator.c)
+
+
+
+
+
